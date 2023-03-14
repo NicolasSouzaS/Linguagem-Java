@@ -21,7 +21,7 @@ public class Estruturaif1 {
 		}
 		//Comando para dizer "Else = Senão"
 		else {
-			System.out.println("O número: " + numero + "é Impar");
+			System.out.println("O número: " + numero + " é Impar");
 		}
 	}
 }
