@@ -1,19 +1,26 @@
 package br.com.poo.estruturaRepeticaoFor;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class EstruturaForTabuada extends JFrame {
-
+	static String dados = "";
 	public static void main(String[] args) {
+		
 		/*
 		 * Gerando um objeto de janela baseado na classe
 		 * JFrame. Abaixo um processo de instância
 		 */
 		JFrame janela = new JFrame ();
+		
+		
 		
 		//Tamanho em largura e altura
 		janela.setSize(500,400);
@@ -77,7 +84,36 @@ public class EstruturaForTabuada extends JFrame {
 		JButton btnCalcular = new JButton("Calcular");
 		
 		btnCalcular.setBounds(250,10,200,30);
-		janela.add(btnCalcular);		
+		janela.add(btnCalcular);
+		
+		
+		
+		
+		
+		btnCalcular.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				for(int i = 1; i <= 20; i++) {
+					
+					
+					dados += txtNumero.getText()+" x "+ i + "=" + Integer.parseInt(txtNumero.getText()) * i + "\n";
+					
+					
+					
+				}
+				
+				
+				
+				txtResultado.setText(dados);
+				txtNumero.setText("");
+				dados = ""; //Limpar a variavel "dados" e substituir o resultado mostrado por outro
+				
+				
+				
+			}
+		});
 		
 		
 		
