@@ -16,6 +16,10 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Café extends JFrame {
 
@@ -27,6 +31,11 @@ public class Café extends JFrame {
 	private JTextField txtQuantidade;
 	private JTextField txtTotalUnitario;
 	private JTextField txtSubtotal;
+	private JTextArea txtNota;
+	private String cabecalho;
+	private int item;
+	private double valorPagar;
+	private JLabel lblValorPagar;
 
 	/**
 	 * Launch the application.
@@ -48,6 +57,21 @@ public class Café extends JFrame {
 	 * Create the frame.
 	 */
 	public Café() {
+		
+		valorPagar = 0.0;
+		
+		item = 1;
+		
+		cabecalho = "\t\t\tFRESHLY BAKED\n\t\t                          PADARIA ARTESANAL" +
+				"\n\t\t                   Av. Rodoanel, 157 - Vista Triste" +
+				"\n\t\t                CEP:30140-140 - SÃO PAULO - SP"+
+				"\n\t\t                       CNPJ:28.663.093/0001-53" +
+				"\n\t\t                               IE:003.044314.0006" +
+				"\n\t\t                               IM:1.046.973/001-0" +
+				"\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" +
+				"\n\t\t                                  CUPOM FISCAL\n" +
+				"   ITEM\tCÓDIGO\t\tDESCRIÇÃO\t\t\t   QTD\tVL.UNIT.\t\tVL.TOTAL" +
+				"\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" ;
 		
 		String[][] produtos = {
 				
@@ -184,6 +208,22 @@ public class Café extends JFrame {
 		pnlEsquerdo.add(lblQuantidade);
 		
 		txtQuantidade = new JTextField();
+		txtQuantidade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				txtTotalUnitario.setText("" +
+					Double.parseDouble(txtQuantidade.getText()) *
+					Double.parseDouble(txtValorUnitario.getText())
+					);
+					txtSubtotal.setText("R$" +
+							Double.parseDouble(txtQuantidade.getText()) *
+							Double.parseDouble(txtValorUnitario.getText())
+						
+						
+						);
+			}
+		});
 		txtQuantidade.setForeground(Color.WHITE);
 		txtQuantidade.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		txtQuantidade.setColumns(10);
@@ -227,6 +267,26 @@ public class Café extends JFrame {
 		pnlEsquerdo.add(lblSubtotal);
 		
 		JButton btnIncluir = new JButton("Incluir");
+		btnIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				cabecalho +="\n"+item+"\t"+txtCodigoProduto.getText()+
+						"\t\t"+txtDescricao.getText()+
+						"\t\t"+txtQuantidade.getText()+
+						"\t"+txtValorUnitario.getText()+
+						"\t"+txtSubtotal.getText();
+				
+				txtNota.setText(cabecalho);
+				item++;
+				
+				
+				
+				valorPagar+= Double.parseDouble(txtTotalUnitario.getText());
+				
+				lblValorPagar.setText("R$ "+valorPagar);
+				
+			}
+		});
 		btnIncluir.setBounds(551, 636, 149, 52);
 		pnlEsquerdo.add(btnIncluir);
 		
@@ -239,10 +299,32 @@ public class Café extends JFrame {
 		pnlDireito.setBackground(new Color(200, 196, 185));
 		pnlDireito.setBounds(810, 0, 790, 700);
 		contentPane.add(pnlDireito);
+		pnlDireito.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 790, 700);
+		pnlDireito.add(scrollPane);
+		
+		txtNota = new JTextArea();
+		scrollPane.setViewportView(txtNota);
+		txtNota.setText(cabecalho);
 		
 		JPanel pnlBase = new JPanel();
 		pnlBase.setBackground(new Color(200, 196, 185));
 		pnlBase.setBounds(5, 707, 1570, 150);
 		contentPane.add(pnlBase);
+		pnlBase.setLayout(null);
+		
+		JLabel lblExemplo = new JLabel("Valor a Pagar:");
+		lblExemplo.setFont(new Font("Swis721 Hv BT", Font.PLAIN, 30));
+		lblExemplo.setBounds(505, 33, 256, 85);
+		pnlBase.add(lblExemplo);
+		
+		lblValorPagar = new JLabel("asdasd");
+		lblValorPagar.setForeground(new Color(0, 0, 255));
+		lblValorPagar.setFont(new Font("Swis721 Blk BT", Font.PLAIN, 36));
+		lblValorPagar.setBounds(789, 23, 680, 101);
+		pnlBase.add(lblValorPagar);
+		lblValorPagar.setText("R$ "+valorPagar);
 	}
 }
