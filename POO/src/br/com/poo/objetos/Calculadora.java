@@ -15,9 +15,12 @@ import java.awt.Color;
 import javax.swing.JTextArea;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.SwingConstants;
 
 public class Calculadora extends JFrame {
 
+	private String valor1;
+	private String valor2;
 	private JPanel contentPane;
 	private int calculo;
 	private int zero = 0;
@@ -31,20 +34,28 @@ public class Calculadora extends JFrame {
 	private int oito;
 	private int nove;
 	private int igual;
-	private int multi;
+	private double multi;
+	private double multi2;
 	private double soma;
-	private int menos;
+	private double menos;
+	private double menos2;
 	private JTextArea txtResultado;
 	private String resultado;
 	private	double soma2;
 	private String guardar;
 	private double valor;
+	private double dividir;
+	private double dividir2;
+	private String operacao;
+	private String caso;
 	
 	
 
 	/**
 	 * Launch the application.
 	 */
+	
+	
 	
 	
 	public static void main(String[] args) {
@@ -90,6 +101,15 @@ public class Calculadora extends JFrame {
 		
 		
 		JButton btnMenos = new JButton("-");
+		btnMenos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				operacao = "-";
+				menos = Double.parseDouble(txtResultado.getText());
+				resultado = "";
+				txtResultado.setText(resultado);
+			}
+		});
 		btnMenos.setFont(new Font("Swis721 WGL4 BT", Font.PLAIN, 34));
 		btnMenos.setBounds(424, 301, 93, 38);
 		contentPane.add(btnMenos);
@@ -98,21 +118,10 @@ public class Calculadora extends JFrame {
 		btnMais.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				operacao = "+";
 				soma = Double.parseDouble(txtResultado.getText());
-				txtResultado.setText(resultado);
 				resultado = "";
-				
-				soma2 = Double.parseDouble(txtResultado.getText());
-				valor += (soma + soma2);
-				
-				
-				
-				
-				
-				
-				
-				
+				txtResultado.setText(resultado);
 				
 			}
 		});
@@ -121,6 +130,15 @@ public class Calculadora extends JFrame {
 		contentPane.add(btnMais);
 		
 		JButton btnMutiplicacao = new JButton("*");
+		btnMutiplicacao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				operacao = "*";
+				multi = Double.parseDouble(txtResultado.getText());
+				txtResultado.setText(resultado);
+				resultado = "";
+			}
+		});
 		btnMutiplicacao.setFont(new Font("Swis721 WGL4 BT", Font.PLAIN, 34));
 		btnMutiplicacao.setBounds(424, 196, 93, 38);
 		contentPane.add(btnMutiplicacao);
@@ -128,6 +146,12 @@ public class Calculadora extends JFrame {
 		JButton btnDivisao = new JButton("/");
 		btnDivisao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				operacao = "/";
+				dividir = Double.parseDouble(txtResultado.getText());
+				txtResultado.setText(resultado);
+				resultado = "";
+				
 			}
 		});
 		btnDivisao.setFont(new Font("Swis721 WGL4 BT", Font.PLAIN, 34));
@@ -338,7 +362,38 @@ public class Calculadora extends JFrame {
 		btnIgual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				txtResultado.setText("" + valor);
+				switch (operacao) {
+				case "+":	
+					soma2 = Double.parseDouble(txtResultado.getText());
+					valor = (soma+soma2);
+					txtResultado.setText("" + valor);
+					break;
+				
+				case "/":
+					
+					dividir2 = Double.parseDouble(txtResultado.getText());
+					valor = (dividir / dividir2);
+					txtResultado.setText("" + valor);
+					break;
+					
+				case "*":
+					
+					multi2 = Double.parseDouble(txtResultado.getText());
+					valor = (multi * multi2);
+					txtResultado.setText("" + valor);
+				break;
+				case "-":
+					
+					menos2 = Double.parseDouble(txtResultado.getText());
+					valor = (menos - menos2);
+					txtResultado.setText("" + valor);
+				break;
+				
+								
+				}
+				
+				
+				
 				
 			}
 		});
@@ -352,6 +407,19 @@ public class Calculadora extends JFrame {
 		txtResultado.setBounds(375, 22, 213, 78);
 		contentPane.add(txtResultado);
 		txtResultado.setText(resultado);
+		
+		JButton btnApagar = new JButton("C");
+		btnApagar.setFont(new Font("Swis721 WGL4 BT", Font.PLAIN, 25));
+		btnApagar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				resultado = "";
+				txtResultado.setText(resultado);
+				
+			}
+		});
+		btnApagar.setBounds(424, 119, 93, 23);
+		contentPane.add(btnApagar);
 		
 	}
 }
