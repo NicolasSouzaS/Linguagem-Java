@@ -73,7 +73,7 @@ public class CRUDChamados extends Conexao implements CRUD<Chamados> {
 		
 		try {
 			abrirConexao();
-			String sql = "SELECT * FROM curso;";
+			String sql = "SELECT * FROM chamados;";
 			//Preparar a consulta para ser executada
 			pst = conn.prepareStatement(sql);
 			/*
@@ -151,7 +151,7 @@ public class CRUDChamados extends Conexao implements CRUD<Chamados> {
 			}
 			
 			else if (obj.getNomepessoa()!=null) {
-				sql = "SELECT * FROM chmaados WHERE nomepessoa LIKE "+obj.getNomepessoa();
+				sql = "SELECT * FROM chamados WHERE nomepessoa LIKE "+obj.getNomepessoa();
 				
 			}
 			else if (obj.getDepartamento()!=null) {

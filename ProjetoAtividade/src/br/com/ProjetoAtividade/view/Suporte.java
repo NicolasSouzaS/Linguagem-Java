@@ -3,21 +3,33 @@ package br.com.ProjetoAtividade.view;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.text.MaskFormatter;
 
 import br.com.ProjetoAtividade.dao.CRUDChamados;
-import javax.swing.JTable;
+import br.com.ProjetoAtividade.domain.Chamados;
 
 public class Suporte extends JFrame {
+	
+	MaskFormatter dr;
 	
 	JFormattedTextField txtData;
 
@@ -25,8 +37,9 @@ public class Suporte extends JFrame {
 	private JTextField txtNome;
 	private JTextField txtObservacao;
 	CRUDChamados cc = new CRUDChamados();
-	private JTable table;
-	private JTextField textField;
+	private JTextField txtStatus;
+	private Long id = null;
+	private Long idAtualizar = null;
 
 	/**
 	 * Launch the application.
@@ -56,6 +69,8 @@ public class Suporte extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		carregarTabela();
+		
 		
 		JLabel lblNomeFuncionario = new JLabel("Nome Funcionario");
 		lblNomeFuncionario.setForeground(Color.WHITE);
@@ -86,6 +101,9 @@ public class Suporte extends JFrame {
 		lblDataDeResoluo.setBounds(10, 303, 231, 42);
 		contentPane.add(lblDataDeResoluo);
 		
+		dr = new MaskFormatter("####-##-##");
+		dr.setPlaceholderCharacter('_');
+		
 		JFormattedTextField txtData = new JFormattedTextField((AbstractFormatter) null);
 		txtData.setBounds(10, 336, 177, 31);
 		contentPane.add(txtData);
@@ -109,6 +127,37 @@ public class Suporte extends JFrame {
 		contentPane.add(lblAno_1_1);
 		
 		JButton btnGravar = new JButton("Gravar");
+		btnGravar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Chamados gravChamados = new Chamados();
+				
+				if(txtNome.getText().trim().equals("")
+					||txtObservacao.getText().trim().equals("")
+					||txtData.getText().trim().equals("")
+					
+						
+						) {;
+								
+				JOptionPane.showMessageDialog(null, "Não foi possível resolver o chamado, verifique as linhas ditadas.","Erro",JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					
+					gravChamados.setNomeFuncionario(txtNome.getText());
+					gravChamados.setObservacao(txtObservacao.getText());
+					gravChamados.setDataResolucao(Date.valueOf(txtData.getText()));
+					gravChamados.setStatusChamado("Resolvido");
+					gravChamados.setIdChamados(idAtualizar);
+					
+				}
+				
+				JOptionPane.showMessageDialog(null, cc.atualizar(gravChamados));
+				carregarTabela();
+				
+				limparCampos();
+				
+			}
+		});
 		btnGravar.setFont(new Font("Swis721 WGL4 BT", Font.BOLD, 20));
 		btnGravar.setBackground(Color.WHITE);
 		btnGravar.setBounds(600, 356, 226, 42);
@@ -124,8 +173,6 @@ public class Suporte extends JFrame {
 		scrollPane.setBounds(0, 398, 851, 110);
 		contentPane.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
 		
 		JLabel lblStatus = new JLabel("Status");
 		lblStatus.setForeground(Color.WHITE);
@@ -133,10 +180,12 @@ public class Suporte extends JFrame {
 		lblStatus.setBounds(581, 61, 231, 42);
 		contentPane.add(lblStatus);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(510, 96, 231, 92);
-		contentPane.add(textField);
+		txtStatus = new JTextField();
+		txtStatus.setColumns(10);
+		txtStatus.setBounds(510, 96, 231, 92);
+		contentPane.add(txtStatus);
+		
+		carregarTabela();
 	}
 	
 	private void carregarTabela() {
@@ -159,8 +208,35 @@ public class Suporte extends JFrame {
 		Object[][] dados = new Object[cc.listar().size()][9];
 		
 		for(int i = 0; i < dados.length; i++) {
-			dados[i][0]
+			dados[i][0] = cc.listar().get(i).getIdChamados();
+			dados[i][1] = cc.listar().get(i).getNomepessoa();
+			dados[i][2] = cc.listar().get(i).getDepartamento();
+			dados[i][3] = cc.listar().get(i).getDescricao();
+			dados[i][4] = cc.listar().get(i).getDataSolicitacao();
+			dados[i][5] = cc.listar().get(i).getDataResolucao();
+			dados[i][6] = cc.listar().get(i).getStatusChamado();
+			dados[i][7] = cc.listar().get(i).getObservacao();
+			dados[i][8] = cc.listar().get(i).getNomeFuncionario();
 		}
+		
+		TableModel model = new DefaultTableModel(dados, cabecalho);
+		
+		JTable table = new JTable(model);
+		table.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			
+			txtStatus.setText(String.valueOf(table.getValueAt(table.getSelectedRow(),6)));
+			
+			id = Long.parseLong(String.valueOf(table.getValueAt(table.getSelectedRow(),0)));
+			idAtualizar = id;
+		}
+			
+			
+			
+			
+		});
+		scrollPane.setViewportView(table);
 	
 	}
 	

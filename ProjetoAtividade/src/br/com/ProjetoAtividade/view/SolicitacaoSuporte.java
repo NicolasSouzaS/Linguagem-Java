@@ -19,6 +19,7 @@ import javax.swing.text.MaskFormatter;
 
 import br.com.ProjetoAtividade.dao.CRUDChamados;
 import br.com.ProjetoAtividade.domain.Chamados;
+import br.com.ProjetoAtividade.util.AcessoSSH;
 
 public class SolicitacaoSuporte extends JFrame {
 
@@ -145,6 +146,20 @@ public class SolicitacaoSuporte extends JFrame {
 		txtDepartamento.setColumns(10);
 		txtDepartamento.setBounds(270, 94, 231, 31);
 		contentPane.add(txtDepartamento);
+		
+		JButton btnAbrirGrafico = new JButton("Abrir Grafico");
+		btnAbrirGrafico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				AcessoSSH ssh = new AcessoSSH();
+				ssh.executar();
+				
+			}
+		});
+		btnAbrirGrafico.setFont(new Font("Swis721 WGL4 BT", Font.BOLD, 20));
+		btnAbrirGrafico.setBackground(Color.WHITE);
+		btnAbrirGrafico.setBounds(248, 364, 226, 42);
+		contentPane.add(btnAbrirGrafico);
 		
 		btnEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
